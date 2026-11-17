@@ -2,13 +2,21 @@
 
 확인일: 2026-11-17. 현재 공개 소스 기준입니다.
 
-![횃비스 시스템 아키텍처](diagrams/system-architecture.svg)
+![횃비스 기술 스택 아키텍처](diagrams/tech-stack-architecture.svg)
 
-[벡터 도식 크게 보기](diagrams/system-architecture.svg) · [PNG 이미지](diagrams/system-architecture.png) · [Mermaid 원본](diagrams/system-architecture.mmd) · [기능별 사용자 플로우](user-flows.md)
+[벡터 도식 크게 보기](diagrams/tech-stack-architecture.svg) · [PNG 이미지](diagrams/tech-stack-architecture.png) · [수정용 생성 코드](diagrams/build-tech-stack.py) · [기능별 사용자 플로우](user-flows.md)
+
+## 시각 레퍼런스와 로고
+
+기술 로고를 노드로 배치하고 실행 환경을 묶는 [Diagrams의 Clustered Web Services·Stateful Architecture 예제](https://diagrams.mingrammer.com/docs/getting-started/examples)를 참고했습니다. 예제의 AWS·Kubernetes 구성은 가져오지 않고 횃비스가 실제 사용하는 기술로 새로 그렸습니다.
+
+웹 표준·Python·NumPy는 Devicon, Claude·Anthropic·Apple·Tailscale은 Simple Icons, Groq는 Lobe Icons, MLX는 Apple MLX 저장소의 벡터 로고를 사용합니다. [고정 커밋·로고 원본·라이선스](diagrams/assets/tech-logos/README.md)를 함께 보관했습니다. 로고는 기술 식별용이며 제휴나 공식 서비스임을 뜻하지 않습니다.
+
+이 그림은 기술 스택과 주된 통신을 보여주는 개요입니다. 함수별 상세 분기는 [이전 상세 실행 경로](diagrams/system-architecture.svg)와 [Mermaid 원본](diagrams/system-architecture.mmd)을 참고하세요. Python 노드는 브라우저 Handler와 맥 마이크의 대화 제어를 요약한 것이며 두 입력 경로가 같은 루프를 통과한다는 뜻은 아닙니다.
 
 ## 경계와 구성
 
-브라우저, Python 프로세스, Claude Code 자식 프로세스, 외부 모델 제공자를 구분하고 통신 방식을 표시했습니다. 구성요소의 책임·기술·통신 관계를 설명하는 [C4 container diagram 지침](https://c4model.com/diagrams/container)을 참고한 구성도입니다. Python 내부 클래스도 함께 표시한 도식이므로 엄밀한 C4 레벨 2 표준 도식이라고 주장하지 않습니다. 위 그림은 현재 실행 경로를 요약한 벡터 도식입니다. [Mermaid 원본](diagrams/system-architecture.mmd)은 세부 노드·데이터 경로를 편집할 수 있도록 별도로 제공합니다.
+브라우저, Python 프로세스, Claude Code 자식 프로세스, 외부 모델 제공자를 구분하고 통신 방식을 표시했습니다. 구성요소의 책임·기술·통신 관계를 설명하는 [C4 container diagram 지침](https://c4model.com/diagrams/container)을 참고한 구성도입니다. Python 내부 클래스도 함께 표시한 도식이므로 엄밀한 C4 레벨 2 표준 도식이라고 주장하지 않습니다. 위 로고형 그림은 기술 스택을, 별도의 상세 도식은 세부 노드·데이터 경로를 보여줍니다.
 
 | 구성요소 | 실제 구현 |
 |---|---|

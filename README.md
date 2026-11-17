@@ -69,11 +69,11 @@ JARVIS_HEADPHONES=1 .venv/bin/python jarvis.py
 
 ## 시스템 아키텍처
 
-사용자 Mac, 브라우저, 외부 서비스의 경계와 입력·응답 경로를 표시했습니다. 일반 Claude 모드와 예시 시연 모드를 구분합니다.
+기술 스택 로고로 브라우저·Python 런타임·로컬 전사·외부 AI·macOS 출력을 묶었습니다. 일반 Claude 모드와 예시 시연 모드를 구분합니다.
 
-![횃비스 시스템 아키텍처](docs/diagrams/system-architecture.svg)
+![횃비스 기술 스택 아키텍처](docs/diagrams/tech-stack-architecture.svg)
 
-[구성요소·통신 경로·공식 조사 자료](docs/architecture.md) · [Mermaid 원본](docs/diagrams/system-architecture.mmd)
+[기술 스택·로고 출처·참고 레퍼런스](docs/architecture.md) · [PNG](docs/diagrams/tech-stack-architecture.png) · [상세 실행 경로 Mermaid](docs/diagrams/system-architecture.mmd)
 
 ## 기능별 사용자 플로우
 
