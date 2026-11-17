@@ -92,8 +92,10 @@ flowchart TB
   groq["Groq STT API\n선택적 외부 전송"]
   provider["Anthropic / 설정된 추론 제공자"]
   user --> mic --> vad --> stt
-  stt -->|"키 없음"| local --> core
-  stt -->|"키 있음 · 녹음 전송"| groq --> core
+  stt <-->|"키 없음"| local
+  stt <-->|"키 있음 · 녹음 전송"| groq
+  stt -->|"맥 입력 결과"| core
+  stt -->|"브라우저 전사 결과"| http
   user --> browser
   browser -->|"POST /api/talk · 글자 또는 녹음"| http
   http -->|"녹음"| stt
