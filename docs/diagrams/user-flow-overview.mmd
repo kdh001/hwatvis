@@ -1,0 +1,18 @@
+flowchart TB
+  start["횃비스 실행"] --> mode{"사용 목적"}
+  mode -->|"시연 · --demo"| input["맥: 횃비스, 질문<br/>브라우저: 말하기 또는 글자 입력"]
+  input --> branch{"알고 싶은 것"}
+  branch --> daily["생활 정보<br/>브리핑·교통·날씨·학식"]
+  branch --> study["학습<br/>자료 찾기·퀴즈·해설·자료 관계"]
+  branch --> files["자료 관리<br/>정리·iCloud·메모"]
+  branch --> clock["현재 시각<br/>실제 Mac 시계"]
+  daily --> example["예시 답변 듣기<br/>상세 카드 확인"]
+  study --> example
+  files --> example
+  example --> limit["실제 정보 조회·파일 변경·DB 저장·동기화 없음"]
+  clock --> now["실제 시각 답변·카드"]
+  mode -->|"일반 · Claude 인증"| live["자유로운 질문·작업 요청"]
+  live --> tools["Claude 응답 또는<br/>허용된 도구의 실제 사용"]
+  tools --> outcome["음성·화면에서 결과 확인<br/>성공 여부는 실제 결과로 확인"]
+  mode -->|"자동 관람 · showcase.py"| auto["마이크 없이<br/>11개 예시 질문 순차 재생"]
+  auto --> example

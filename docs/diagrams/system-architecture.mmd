@@ -1,0 +1,45 @@
+flowchart TB
+  user["사용자"]
+  browser["브라우저 · face.html<br/>녹음 · 글자 · 질문/답변 · 음성 재생"]
+  subgraph mac["사용자 Mac"]
+    mic["마이크 · sounddevice"]
+    vad["webrtcvad<br/>16 kHz 모노 / 30 ms"]
+    stt["stt()<br/>키 유무로 전사 엔진 선택"]
+    local["로컬 mlx-whisper<br/>모델 최초 다운로드 필요"]
+    core["Jarvis.handle / respond<br/>호출어 · 대화 · 중단 · 에코 필터"]
+    http["HTTP Handler<br/>127.0.0.1:8765"]
+    mode{"시작 시 --demo 선택"}
+    demo["DemoBrain<br/>정해진 예시 응답 · 카드"]
+    brain["Brain 래퍼"]
+    cli["Claude Code 자식 프로세스"]
+    tools["허용 도구<br/>검색 · 파일 · AppleScript · hands.py"]
+    dispatch["호출자 출력 처리<br/>맥은 문장 콜백 / HTTP는 답변 모음"]
+    tts["macOS say<br/>Mouth: 맥 스피커<br/>synth_file: 브라우저용 음성 파일"]
+    face["Face 상태 · 카드 · 자막<br/>클라이언트별 SSE 큐"]
+  end
+  groq["Groq 전사 API<br/>선택적 녹음 전송"]
+  provider["Anthropic / 설정된 추론 제공자"]
+  user --> mic --> vad --> stt
+  stt <-->|"GROQ_API_KEY 없음"| local
+  stt <-->|"GROQ_API_KEY 있음"| groq
+  stt -->|"맥 마이크 결과만"| core
+  user --> browser
+  browser -->|"POST /api/talk<br/>글자 또는 녹음"| http
+  http <-->|"브라우저 녹음 전사 요청 · 결과"| stt
+  core --> mode
+  http -->|"글자 또는 전사 결과<br/>호출어 대기 루프를 통과하지 않음"| mode
+  mode -->|"--demo"| demo
+  mode -->|"일반 실행"| brain
+  brain <-->|"입출력 stream-json"| cli
+  cli <-->|"모델 요청 · 응답"| provider
+  cli --> tools
+  demo --> dispatch
+  brain --> dispatch
+  dispatch --> tts
+  dispatch --> face
+  demo -->|"예시 카드"| face
+  tts -->|"맥 말하기 상태"| face
+  tts -->|"Mouth · 맥 스피커"| user
+  tts -->|"synth_file · 브라우저 음성"| http
+  http -->|"JSON 답변 + 선택적 base64 음성"| browser
+  face -->|"GET /events · SSE"| browser

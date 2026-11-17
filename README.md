@@ -69,53 +69,19 @@ JARVIS_HEADPHONES=1 .venv/bin/python jarvis.py
 
 ## 시스템 아키텍처
 
-실제 코드의 구성과 통신 경로를 정리했습니다. `DemoBrain`의 예시 카드는 실제 정보 시스템과 연결되지 않습니다.
+사용자 Mac, 브라우저, 외부 서비스의 경계와 입력·응답 경로를 표시했습니다. 일반 Claude 모드와 예시 시연 모드를 구분합니다.
 
-```mermaid
-flowchart TB
-  user["사용자"]
-  browser["브라우저 · face.html\n질문·답변·상태·정보 카드"]
-  subgraph mac["사용자 Mac"]
-    mic["마이크 · sounddevice"]
-    vad["VAD · webrtcvad\n16 kHz / 30 ms"]
-    stt["받아쓰기 선택\nGROQ_API_KEY 유무"]
-    local["로컬 mlx-whisper"]
-    core["Jarvis\n호출어·대화·중단·에코 필터"]
-    http["HTTP Handler\n127.0.0.1:8765"]
-    mode{"실행 모드"}
-    demo["DemoBrain\n예시 응답·카드"]
-    cli["Claude Code CLI\n입출력 stream-json"]
-    tools["허용 도구\n검색·파일·AppleScript·hands.py"]
-    tts["macOS say\n스피커 또는 음성 파일"]
-    face["Face 상태 이벤트"]
-  end
-  groq["Groq STT API\n선택적 외부 전송"]
-  provider["Anthropic / 설정된 추론 제공자"]
-  user --> mic --> vad --> stt
-  stt <-->|"키 없음"| local
-  stt <-->|"키 있음 · 녹음 전송"| groq
-  stt -->|"맥 입력 결과"| core
-  stt -->|"브라우저 전사 결과"| http
-  user --> browser
-  browser -->|"POST /api/talk · 글자 또는 녹음"| http
-  http -->|"녹음"| stt
-  http -->|"인식된 글자 또는 입력 글자"| mode
-  core --> mode
-  mode -->|"--demo"| demo
-  mode -->|"일반 실행"| cli
-  cli <-->|"모델 요청·응답"| provider
-  cli --> tools
-  demo --> tts
-  cli --> tts
-  demo --> face
-  core --> face
-  tts --> face
-  face -->|"GET /events · SSE"| browser
-  tts -->|"맥 스피커"| user
-  http -->|"답변 JSON · 선택적 base64 음성"| browser
-```
+![횃비스 시스템 아키텍처](docs/diagrams/system-architecture.svg)
 
-구현별 책임·마이크와 브라우저의 차이·공식 기술 자료는 [아키텍처 설명](docs/architecture.md)에 정리했습니다. 도식은 소스에서 확인한 현재 구조이며, 설계 문서의 미래 기능을 구현된 것처럼 포함하지 않았습니다.
+[구성요소·통신 경로·공식 조사 자료](docs/architecture.md) · [Mermaid 원본](docs/diagrams/system-architecture.mmd)
+
+## 기능별 사용자 플로우
+
+질문을 시작하는 방법부터 각 기능의 화면·음성 결과까지, 실제 동작과 예시 응답을 나눠 정리했습니다.
+
+![횃비스 사용자 플로우 개요](docs/diagrams/user-flow-overview.svg)
+
+[입력 방식과 기능별 상세 플로우](docs/user-flows.md) · [개요 Mermaid 원본](docs/diagrams/user-flow-overview.mmd)
 
 ## 설정
 

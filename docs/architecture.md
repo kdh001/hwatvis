@@ -2,9 +2,13 @@
 
 확인일: 2026-11-17. 현재 공개 소스 기준입니다.
 
+![횃비스 시스템 아키텍처](diagrams/system-architecture.svg)
+
+[벡터 도식 크게 보기](diagrams/system-architecture.svg) · [PNG 이미지](diagrams/system-architecture.png) · [Mermaid 원본](diagrams/system-architecture.mmd) · [기능별 사용자 플로우](user-flows.md)
+
 ## 경계와 구성
 
-브라우저, Python 프로세스, Claude Code 자식 프로세스, 외부 모델 제공자를 구분하고 통신 방식을 표시했습니다. 구성요소의 책임·기술·통신 관계를 설명하는 [C4 container diagram 지침](https://c4model.com/diagrams/container)을 참고한 구성도입니다. Python 내부 클래스도 함께 표시한 도식이므로 엄밀한 C4 레벨 2 표준 도식이라고 주장하지 않습니다. 전체 그림은 [README](../README.md#시스템-아키텍처)에 있습니다.
+브라우저, Python 프로세스, Claude Code 자식 프로세스, 외부 모델 제공자를 구분하고 통신 방식을 표시했습니다. 구성요소의 책임·기술·통신 관계를 설명하는 [C4 container diagram 지침](https://c4model.com/diagrams/container)을 참고한 구성도입니다. Python 내부 클래스도 함께 표시한 도식이므로 엄밀한 C4 레벨 2 표준 도식이라고 주장하지 않습니다. 위 그림은 현재 실행 경로를 요약한 벡터 도식입니다. [Mermaid 원본](diagrams/system-architecture.mmd)은 세부 노드·데이터 경로를 편집할 수 있도록 별도로 제공합니다.
 
 | 구성요소 | 실제 구현 |
 |---|---|
@@ -24,7 +28,7 @@
 2. **브라우저:** 녹음 또는 글자 → HTTP Handler → 필요 시 STT → 두뇌 → 답변 JSON. 요청의 `audio` 여부 등에 따라 음성 파일도 반환하며 브라우저가 재생합니다. 마이크의 호출어 대기 루프를 통과하지 않습니다.
 3. **자동 시연:** `showcase.py`가 예시 질의를 순서대로 넣고 `DemoBrain.answer()`·`say`·화면 이벤트를 호출합니다. 실제 검색이나 파일 작업의 실행 증거가 아닙니다.
 
-따라서 모든 입력이 하나의 대화 제어 함수로 통합된 구조가 아닙니다. 원격 브라우저의 음성 응답과 맥 마이크의 음성 큐도 별도 경로입니다. 현재 구조를 그대로 문서화했으며 대규모 리팩터링은 하지 않았습니다.
+따라서 모든 입력이 하나의 대화 제어 함수로 통합된 구조가 아닙니다. 원격 브라우저의 음성 응답과 맥 마이크의 음성 큐도 별도 경로입니다. 브라우저의 녹음은 `Handler.do_POST()`가 `stt()`를 호출한 뒤 그 결과를 다시 받아 두뇌에 직접 전달합니다. 이 결과가 `Jarvis.handle()`로 들어가는 것은 아닙니다. 전사 엔진은 키 유무로 선택하며 Groq 오류 때 로컬 엔진으로 자동 재시도하지 않습니다. 현재 구조를 그대로 문서화했으며 대규모 리팩터링은 하지 않았습니다.
 
 ## 외부 통신과 데이터
 

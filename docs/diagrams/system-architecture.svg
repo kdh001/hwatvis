@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="1230" viewBox="0 0 1560 1230" role="img" aria-labelledby="title desc">
+<title id="title">횃비스 시스템 아키텍처</title><desc id="desc">브라우저와 맥 마이크의 서로 다른 입력 경로, 전사 엔진 선택, 시연 및 Claude 실행 모드, 음성 출력과 SSE 상태 전달을 보여준다. 날씨와 버스 등은 시연 데이터이며 실제 외부 정보 서비스나 DB 연결은 없다.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#45617c"/></marker><marker id="external" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#a86112"/></marker></defs>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;fill:#18324c} .title{font-size:32px;font-weight:700}.subtitle{font-size:17px;fill:#53697e}.group{font-size:20px;font-weight:700}.node-title{font-size:19px;font-weight:650}.node-detail{font-size:16px;fill:#455e75}.label{font-size:15px;fill:#45617c;paint-order:stroke;stroke:#fff;stroke-width:6px;stroke-linejoin:round}.small{font-size:15px;fill:#53697e}.line{fill:none;stroke:#45617c;stroke-width:2;marker-end:url(#arrow)}.two{marker-start:url(#arrow)}.ext{stroke:#a86112;marker-end:url(#external);marker-start:url(#external)}.event{stroke-dasharray:7 6}</style>
+<rect width="1560" height="1230" fill="#fff"/>
+<text x="36" y="53" class="title">횃비스 시스템 아키텍처</text>
+<text x="36" y="84" class="subtitle">현재 구현 · 2026-11-17  |  마이크 입력과 브라우저 입력은 서로 다른 제어 경로를 사용합니다.</text>
+<rect x="350" y="120" width="770" height="1000" rx="16" fill="#f6f9fc" stroke="#c1d1df"/>
+<text x="378" y="153" class="group">사용자 Mac</text>
+<rect x="1150" y="120" width="370" height="1000" rx="16" fill="#fffaf2" stroke="#e5cda8"/>
+<text x="1178" y="153" class="group">외부 서비스</text>
+<text x="36" y="153" class="group">사용자 입력·화면</text>
+
+<path d="M690 230H750" class="line"/>
+<text x="698" y="212" class="label">16 kHz</text>
+<path d="M905 280V350" class="line"/>
+<text x="918" y="322" class="label">맥 전사 결과</text>
+<path d="M535 350V312H815V280" class="line two"/>
+<text x="400" y="300" class="label">브라우저 녹음 전사 요청·결과</text>
+<path d="M1060 230H1180" class="line ext"/>
+<text x="1084" y="212" class="label">키 있음</text>
+<path d="M300 410H380" class="line two"/>
+<text x="315" y="390" class="label">HTTP</text>
+<path d="M535 470V500H640V540" class="line"/>
+<text x="393" y="525" class="label">글자·브라우저 전사 결과</text>
+<path d="M905 470V500H800V540" class="line"/>
+<text x="858" y="525" class="label">맥 대화 제어 후</text>
+<path d="M650 625V660H535V700" class="line"/>
+<text x="550" y="683" class="label">--demo</text>
+<path d="M790 625V660H905V700" class="line"/>
+<text x="918" y="684" class="label">일반 실행</text>
+<path d="M1060 755H1180" class="line ext"/>
+<text x="1070" y="737" class="label">모델 요청·응답</text>
+<path d="M535 810V930" class="line"/>
+<text x="548" y="879" class="label">예시 답변</text>
+<path d="M905 845V880H620V930" class="line"/>
+<text x="720" y="868" class="label">응답 콜백</text>
+<path d="M690 1015H750" class="line event"/>
+<text x="720" y="1000" text-anchor="middle" class="label">상태</text>
+<path d="M690 750H715V900H820V930" class="line event"/>
+<text x="727" y="922" class="label">예시 카드</text>
+<path d="M535 930H365V430H380" class="line"/>
+<path d="M905 1050V1090H320V492H175V475" class="line event"/>
+<rect x="36" y="350" width="264" height="125" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="54" y="381" class="node-title">브라우저 · face.html</text>
+<text x="54" y="410" class="node-detail">녹음 또는 글자 입력</text>
+<text x="54" y="435" class="node-detail">질문·답변·카드·음성 재생</text>
+<rect x="380" y="180" width="310" height="100" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="398" y="211" class="node-title">마이크 → 음성 구간</text>
+<text x="398" y="240" class="node-detail">sounddevice · webrtcvad</text>
+<text x="398" y="265" class="node-detail">16 kHz 모노 / 30 ms</text>
+<rect x="750" y="180" width="310" height="100" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="768" y="211" class="node-title">받아쓰기 · stt()</text>
+<text x="768" y="240" class="node-detail">키 없음: 로컬 mlx-whisper</text>
+<text x="768" y="265" class="node-detail">키 있음: Groq API 전사</text>
+<rect x="1180" y="180" width="310" height="100" rx="10" fill="#fff" stroke="#d5b27f"/>
+<text x="1198" y="211" class="node-title">Groq STT API</text>
+<text x="1198" y="240" class="node-detail">선택적으로 녹음 전송</text>
+<text x="1198" y="265" class="node-detail">장애 시 자동 fallback 아님</text>
+<rect x="380" y="350" width="310" height="120" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="398" y="381" class="node-title">HTTP Handler</text>
+<text x="398" y="410" class="node-detail">127.0.0.1:8765</text>
+<text x="398" y="435" class="node-detail">POST /api/talk · 응답 JSON</text>
+<rect x="750" y="350" width="310" height="120" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="768" y="381" class="node-title">Jarvis.handle / respond</text>
+<text x="768" y="410" class="node-detail">호출어·대화·중단·에코 필터</text>
+<text x="768" y="435" class="node-detail">마이크 전사 결과는 이 경로로</text>
+<rect x="580" y="540" width="280" height="85" rx="10" fill="#e9f1fb" stroke="#9bb7d5"/>
+<text x="598" y="571" class="node-title">시작 시 실행 모드 선택</text>
+<text x="598" y="600" class="node-detail">--demo 유무로 두뇌 결정</text>
+<rect x="380" y="700" width="310" height="110" rx="10" fill="#eff2ff" stroke="#b2bce3"/>
+<text x="398" y="731" class="node-title">DemoBrain</text>
+<text x="398" y="760" class="node-detail">정해진 예시 대사·카드</text>
+<text x="398" y="785" class="node-detail">외부 조회·파일 변경 없음</text>
+<rect x="750" y="700" width="310" height="145" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="768" y="731" class="node-title">Brain ↔ Claude Code CLI</text>
+<text x="768" y="760" class="node-detail">별도 CLI 프로세스와 통신</text>
+<text x="768" y="785" class="node-detail">입출력 stream-json</text>
+<text x="768" y="810" class="node-detail">검색·파일·AppleScript·hands.py</text>
+<rect x="1180" y="700" width="310" height="145" rx="10" fill="#fff" stroke="#d5b27f"/>
+<text x="1198" y="731" class="node-title">추론 제공자</text>
+<text x="1198" y="760" class="node-detail">Anthropic 또는 설정된 제공자</text>
+<text x="1198" y="785" class="node-detail">입력·도구 결과 전송 가능</text>
+<text x="1198" y="810" class="node-detail">사용자 자신의 인증 사용</text>
+<rect x="380" y="930" width="310" height="120" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="398" y="961" class="node-title">출력 처리 · macOS say</text>
+<text x="398" y="990" class="node-detail">Mouth: 맥 스피커로 말하기</text>
+<text x="398" y="1015" class="node-detail">synth_file: 브라우저 음성 파일</text>
+<rect x="750" y="930" width="310" height="120" rx="10" fill="#fff" stroke="#bdcddb"/>
+<text x="768" y="961" class="node-title">Face · 화면 상태</text>
+<text x="768" y="990" class="node-detail">상태·자막·시연 카드</text>
+<text x="768" y="1015" class="node-detail">클라이언트별 SSE 이벤트 큐</text>
+<text x="36" y="508" class="small">POST: 글자 또는 녹음</text>
+<text x="36" y="534" class="small">응답: JSON + 선택적 base64 음성</text>
+<text x="36" y="603" class="small">원격 폰 접속은 선택 사항</text>
+<text x="36" y="630" class="small">Tailscale Serve → 이 Mac</text>
+<text x="36" y="657" class="small">현재 서버는 인터넷 공개용이 아님</text>
+<text x="36" y="1094" class="small">GET /events · SSE 상태 전달</text>
+<text x="378" y="1086" class="small">브라우저 음성은 Handler가 생성·반환</text>
+<text x="1178" y="370" class="small">로컬 전사도 최초 모델 다운로드 시</text>
+<text x="1178" y="395" class="small">네트워크를 사용할 수 있습니다.</text>
+<text x="1178" y="925" class="small">시연의 날씨·버스·학식·자료 검색은</text>
+<text x="1178" y="950" class="small">고정 예시입니다. 실제 정보 API,</text>
+<text x="1178" y="975" class="small">DB·RAG·iCloud 연결은 없습니다.</text>
+<line x1="36" y1="1160" x2="90" y2="1160" class="line"/><text x="105" y="1165" class="small">요청·응답 / 호출</text><line x1="310" y1="1160" x2="364" y2="1160" class="line event"/><text x="380" y="1165" class="small">화면 이벤트</text><line x1="580" y1="1160" x2="634" y2="1160" class="line ext"/><text x="650" y="1165" class="small">외부 서비스 통신</text><text x="36" y="1200" class="small">실제 코드 기준 구성도 · 브라우저 요청은 호출어 대기 루프를 거치지 않음 · CLI 도구 권한은 별도 강제 샌드박스가 아님</text></svg>
