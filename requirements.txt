@@ -1,0 +1,6 @@
+sounddevice
+numpy
+requests
+webrtcvad-wheels
+pyobjc-framework-Quartz
+mlx-whisper

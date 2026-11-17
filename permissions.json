@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read", "Glob", "Grep", "WebSearch", "WebFetch",
+      "Write(./workspace/**)", "Edit(./workspace/**)",
+      "Bash(date:*)", "Bash(ls:*)", "Bash(open:*)", "Bash(osascript:*)", "Bash(sleep:*)",
+      "Bash(.venv/bin/python hands.py:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)", "Bash(sudo:*)", "Bash(curl:*)",
+      "Edit(./jarvis.py)", "Edit(./hands.py)", "Edit(./face.html)", "Edit(./persona.md)", "Edit(./permissions.json)",
+      "Write(./jarvis.py)", "Write(./hands.py)", "Write(./face.html)", "Write(./persona.md)", "Write(./permissions.json)"
+    ]
+  }
+}
